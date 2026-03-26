@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Wish Jar ✨</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lora:ital@0;1&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    :root {
+      --bg: #0d0b0f;
+      --glass: rgba(255,255,255,0.04);
+      --border: rgba(255,255,255,0.08);
+      --gold: #e8c97e;
+      --gold-dim: #a8893e;
+      --text: #f0e8d8;
+      --muted: #7a6f62;
+      --granted: #6fcf97;
+      --danger: #eb5757;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Lora', serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px 80px;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        radial-gradient(1px 1px at 10% 15%, rgba(255,255,255,0.4) 0%, transparent 100%),
+        radial-gradient(1px 1px at 30% 55%, rgba(255,255,255,0.3) 0%, transparent 100%),
+        radial-gradient(1px 1px at 55% 20%, rgba(255,255,255,0.5) 0%, transparent 100%),
+        radial-gradient(1px 1px at 75% 70%, rgba(255,255,255,0.3) 0%, transparent 100%),
+        radial-gradient(1px 1px at 90% 35%, rgba(255,255,255,0.4) 0%, transparent 100%),
+        radial-gradient(1px 1px at 20% 80%, rgba(255,255,255,0.2) 0%, transparent 100%),
+        radial-gradient(1px 1px at 65% 90%, rgba(255,255,255,0.3) 0%, transparent 100%),
+        radial-gradient(2px 2px at 45% 45%, rgba(232,201,126,0.3) 0%, transparent 100%),
+        radial-gradient(2px 2px at 80% 10%, rgba(232,201,126,0.2) 0%, transparent 100%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      top: -200px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(ellipse, rgba(232,201,126,0.06) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 560px;
+    }
+
+    /* AUTH SCREEN */
+    #authScreen {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 80vh;
+      animation: fadeUp 0.6s ease both;
+    }
+
+    .auth-card {
+      background: var(--glass);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 36px 28px;
+      width: 100%;
+      max-width: 400px;
+      backdrop-filter: blur(12px);
+      text-align: center;
+    }
+
+    .auth-jar { font-size: 48px; display: block; margin-bottom: 12px; filter: drop-shadow(0 0 20px rgba(232,201,126,0.4)); animation: float 4s ease-in-out infinite; }
+    .auth-card h1 { font-family: 'Playfair Display', serif; font-size: 2rem; color: var(--gold); margin-bottom: 6px; }
+    .auth-card p { color: var(--muted); font-style: italic; font-size: 0.9rem; margin-bottom: 28px; }
+
+    .auth-tabs { display: flex; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin-bottom: 20px; }
+    .auth-tab { flex: 1; padding: 10px; background: none; border: none; color: var(--muted); font-family: 'Lora', serif; font-size: 0.9rem; cursor: pointer; transition: all 0.2s; }
+    .auth-tab.active { background: rgba(232,201,126,0.1); color: var(--gold); }
+
+    .auth-input { width: 100%; background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 10px; color: var(--text); font-family: 'Lora', serif; font-size: 0.95rem; padding: 13px 16px; outline: none; margin-bottom: 12px; transition: border-color 0.3s; display: block; }
+    .auth-input:focus { border-color: var(--gold-dim); }
+    .auth-input::placeholder { color: var(--muted); }
+
+    .auth-btn { width: 100%; padding: 13px; background: linear-gradient(135deg, var(--gold-dim), var(--gold)); border: none; border-radius: 10px; color: #0d0b0f; font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 700; cursor: pointer; transition: opacity 0.2s, transform 0.15s; margin-top: 4px; }
+    .auth-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+    .auth-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .auth-msg { font-size: 0.82rem; margin-top: 12px; min-height: 18px; font-style: italic; color: var(--granted); }
+    .auth-msg.error { color: var(--danger); }
+
+    /* MAIN APP */
+    #appScreen { display: none; }
+
+    header { text-align: center; margin-bottom: 36px; animation: fadeDown 0.8s ease both; }
+    .jar-icon { font-size: 56px; display: block; margin-bottom: 12px; filter: drop-shadow(0 0 20px rgba(232,201,126,0.4)); animation: float 4s ease-in-out infinite; }
+    h1 { font-family: 'Playfair Display', serif; font-size: 2.6rem; font-weight: 700; color: var(--gold); letter-spacing: -0.5px; line-height: 1.1; }
+    .subtitle { font-style: italic; color: var(--muted); font-size: 0.95rem; margin-top: 6px; }
+
+    .user-bar { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 12px; font-size: 0.8rem; color: var(--muted); }
+    .signout-btn { background: none; border: 1px solid var(--border); border-radius: 6px; color: var(--muted); font-family: 'Lora', serif; font-size: 0.75rem; padding: 3px 10px; cursor: pointer; transition: all 0.2s; }
+    .signout-btn:hover { border-color: var(--danger); color: var(--danger); }
+
+    .wish-card { background: var(--glass); border: 1px solid var(--border); border-radius: 20px; padding: 28px; margin-bottom: 28px; backdrop-filter: blur(12px); animation: fadeUp 0.8s ease 0.2s both; }
+    .wish-card label { display: block; font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase; color: var(--gold-dim); margin-bottom: 12px; }
+
+    textarea { width: 100%; background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 12px; color: var(--text); font-family: 'Lora', serif; font-size: 1rem; padding: 16px; resize: none; height: 110px; outline: none; transition: border-color 0.3s; }
+    textarea::placeholder { color: var(--muted); font-style: italic; }
+    textarea:focus { border-color: var(--gold-dim); }
+
+    button.submit-btn { width: 100%; margin-top: 16px; padding: 14px; background: linear-gradient(135deg, var(--gold-dim), var(--gold)); border: none; border-radius: 12px; color: #0d0b0f; font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 700; cursor: pointer; letter-spacing: 0.5px; transition: opacity 0.2s, transform 0.15s; }
+    button.submit-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+    button.submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .status-msg { text-align: center; font-size: 0.85rem; margin-top: 10px; min-height: 20px; color: var(--granted); font-style: italic; opacity: 0; transition: opacity 0.3s; }
+    .status-msg.visible { opacity: 1; }
+    .status-msg.error { color: var(--danger); }
+
+    /* SEARCH & FILTER */
+    .controls { display: flex; gap: 10px; margin-bottom: 20px; animation: fadeUp 0.8s ease 0.3s both; flex-wrap: wrap; }
+    .search-input { flex: 1; min-width: 150px; background: var(--glass); border: 1px solid var(--border); border-radius: 10px; color: var(--text); font-family: 'Lora', serif; font-size: 0.9rem; padding: 10px 14px; outline: none; transition: border-color 0.3s; }
+    .search-input:focus { border-color: var(--gold-dim); }
+    .search-input::placeholder { color: var(--muted); font-style: italic; }
+    .date-input { background: var(--glass); border: 1px solid var(--border); border-radius: 10px; color: var(--muted); font-family: 'Lora', serif; font-size: 0.85rem; padding: 10px 12px; outline: none; color-scheme: dark; transition: border-color 0.3s; }
+    .date-input:focus { border-color: var(--gold-dim); }
+    .clear-btn { background: none; border: 1px solid var(--border); border-radius: 10px; color: var(--muted); font-size: 0.8rem; padding: 10px 12px; cursor: pointer; font-family: 'Lora', serif; transition: all 0.2s; white-space: nowrap; }
+    .clear-btn:hover { border-color: var(--gold-dim); color: var(--gold); }
+
+    .wishes-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; animation: fadeUp 0.8s ease 0.4s both; }
+    .wishes-header h2 { font-family: 'Playfair Display', serif; font-size: 1.2rem; color: var(--gold); }
+    .count-badge { font-size: 0.75rem; background: rgba(232,201,126,0.1); border: 1px solid var(--gold-dim); color: var(--gold-dim); padding: 3px 10px; border-radius: 20px; }
+
+    .wishes-list { display: flex; flex-direction: column; gap: 12px; }
+
+    .wish-item { background: var(--glass); border: 1px solid var(--border); border-radius: 16px; padding: 18px 20px; display: flex; align-items: flex-start; gap: 10px; animation: fadeUp 0.4s ease both; transition: border-color 0.3s, background 0.3s; }
+    .wish-item.granted-item { border-color: rgba(111,207,151,0.2); background: rgba(111,207,151,0.04); }
+    .wish-text { flex: 1; font-size: 0.97rem; line-height: 1.6; color: var(--text); }
+    .wish-item.granted-item .wish-text { text-decoration: line-through; color: var(--muted); }
+    .wish-meta { font-size: 0.72rem; color: var(--muted); margin-top: 4px; font-style: italic; }
+
+    .wish-actions { display: flex; flex-direction: column; gap: 6px; flex-shrink: 0; }
+    .grant-btn, .delete-btn { background: none; border: 1px solid var(--border); border-radius: 8px; padding: 6px 10px; font-size: 1rem; cursor: pointer; transition: all 0.2s; }
+    .grant-btn { color: var(--muted); }
+    .grant-btn:hover { border-color: var(--granted); color: var(--granted); }
+    .grant-btn.granted { border-color: var(--granted); color: var(--granted); }
+    .delete-btn { color: var(--muted); }
+    .delete-btn:hover { border-color: var(--danger); color: var(--danger); }
+
+    .empty-state { text-align: center; padding: 48px 20px; color: var(--muted); font-style: italic; animation: fadeUp 0.5s ease both; }
+    .empty-state span { font-size: 2rem; display: block; margin-bottom: 12px; }
+    .loading { text-align: center; padding: 30px; color: var(--muted); font-style: italic; font-size: 0.9rem; }
+
+    @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+    @keyframes fadeDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <!-- AUTH SCREEN -->
+  <div id="authScreen">
+    <div class="auth-card">
+      <span class="auth-jar">🫙</span>
+      <h1>Wish Jar</h1>
+      <p>Your private space for wishes</p>
+      <div class="auth-tabs">
+        <button class="auth-tab active" onclick="switchTab('login')">Sign In</button>
+        <button class="auth-tab" onclick="switchTab('signup')">Sign Up</button>
+      </div>
+      <input class="auth-input" id="authEmail" type="email" placeholder="Email address" />
+      <input class="auth-input" id="authPassword" type="password" placeholder="Password" />
+      <button class="auth-btn" id="authBtn" onclick="handleAuth()">✨ Sign In</button>
+      <div class="auth-msg" id="authMsg"></div>
+    </div>
+  </div>
+
+  <!-- MAIN APP -->
+  <div id="appScreen">
+    <header>
+      <span class="jar-icon">🫙</span>
+      <h1>Wish Jar</h1>
+      <p class="subtitle">Write it down. Set it free.</p>
+      <div class="user-bar">
+        <span id="userEmail"></span>
+        <button class="signout-btn" onclick="signOut()">Sign out</button>
+      </div>
+    </header>
+
+    <div class="wish-card">
+      <label>Your Wish</label>
+      <textarea id="wishInput" placeholder="I wish for…" maxlength="500"></textarea>
+      <button class="submit-btn" id="submitBtn" onclick="submitWish()">✨ Drop it in the jar</button>
+      <div class="status-msg" id="statusMsg"></div>
+    </div>
+
+    <div class="controls">
+      <input class="search-input" id="searchInput" type="text" placeholder="🔍 Search wishes…" oninput="applyFilters()" />
+      <input class="date-input" id="dateFilter" type="date" onchange="applyFilters()" />
+      <button class="clear-btn" onclick="clearFilters()">Clear</button>
+    </div>
+
+    <div class="wishes-header">
+      <h2>All Wishes</h2>
+      <span class="count-badge" id="countBadge">0 wishes</span>
+    </div>
+
+    <div class="wishes-list" id="wishesList">
+      <div class="loading">Loading wishes…</div>
+    </div>
+  </div>
+
+</div>
+<script>
+  const SUPABASE_URL = 'https://hzrwpqoakptgiyuwxywp.supabase.co';
+  const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh6cndwcW9ha3B0Z2l5dXd4eXdwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ1Mjk5MDAsImV4cCI6MjA5MDEwNTkwMH0.2kF0VG2mete24UxW_H12bNT4XVdKI8R0n4incmnFZHA';
+  const { createClient } = supabase;
+  const db = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  let wishes = [];
+  let currentTab = 'login';
+  let currentUser = null;
+
+  function switchTab(tab) {
+    currentTab = tab;
+    document.querySelectorAll('.auth-tab').forEach((t, i) => {
+      t.classList.toggle('active', (i === 0 && tab === 'login') || (i === 1 && tab === 'signup'));
+    });
+    document.getElementById('authBtn').textContent = tab === 'login' ? '✨ Sign In' : '✨ Create Account';
+    document.getElementById('authMsg').textContent = '';
+  }
+
+  async function handleAuth() {
+    const email = document.getElementById('authEmail').value.trim();
+    const password = document.getElementById('authPassword').value;
+    const btn = document.getElementById('authBtn');
+    if (!email || !password) { showAuthMsg('Please fill in both fields.', true); return; }
+    btn.disabled = true;
+    btn.textContent = 'Please wait…';
+    let result;
+    if (currentTab === 'login') {
+      result = await db.auth.signInWithPassword({ email, password });
+    } else {
+      result = await db.auth.signUp({ email, password });
+    }
+    if (result.error) {
+      showAuthMsg(result.error.message, true);
+    } else if (currentTab === 'signup' && !result.data.session) {
+      showAuthMsg('Check your email to confirm your account!', false);
+    } else {
+      currentUser = result.data.user;
+      showApp();
+    }
+    btn.disabled = false;
+    btn.textContent = currentTab === 'login' ? '✨ Sign In' : '✨ Create Account';
+  }
+
+  async function signOut() {
+    await db.auth.signOut();
+    currentUser = null; wishes = [];
+    document.getElementById('appScreen').style.display = 'none';
+    document.getElementById('authScreen').style.display = 'flex';
+    document.getElementById('authEmail').value = '';
+    document.getElementById('authPassword').value = '';
+  }
+
+  function showAuthMsg(msg, isError) {
+    const el = document.getElementById('authMsg');
+    el.textContent = msg;
+    el.className = 'auth-msg' + (isError ? ' error' : '');
+  }
+
+  function showApp() {
+    document.getElementById('authScreen').style.display = 'none';
+    document.getElementById('appScreen').style.display = 'block';
+    document.getElementById('userEmail').textContent = currentUser.email;
+    loadWishes();
+  }
+
+  async function loadWishes() {
+    const { data, error } = await db.from('wishes').select('*').eq('user_id', currentUser.id).order('created_at', { ascending: false });
+    if (error) { document.getElementById('wishesList').innerHTML = `<div class="loading">Could not load wishes.</div>`; return; }
+    wishes = data;
+    applyFilters();
+  }
+
+  function applyFilters() {
+    const search = document.getElementById('searchInput').value.toLowerCase();
+    const date = document.getElementById('dateFilter').value;
+    const filtered = wishes.filter(w => {
+      const matchSearch = !search || w.wish.toLowerCase().includes(search);
+      const matchDate = !date || w.created_at.startsWith(date);
+      return matchSearch && matchDate;
+    });
+    renderWishes(filtered);
+  }
+
+  function clearFilters() {
+    document.getElementById('searchInput').value = '';
+    document.getElementById('dateFilter').value = '';
+    applyFilters();
+  }
+
+  function renderWishes(list) {
+    const el = document.getElementById('wishesList');
+    document.getElementById('countBadge').textContent = `${list.length} wish${list.length !== 1 ? 'es' : ''}`;
+    if (list.length === 0) { el.innerHTML = `<div class="empty-state"><span>🌙</span>No wishes found.</div>`; return; }
+    el.innerHTML = list.map((w, i) => `
+      <div class="wish-item ${w.granted ? 'granted-item' : ''}" style="animation-delay:${i * 0.05}s">
+        <div style="flex:1">
+          <div class="wish-text">${escapeHtml(w.wish)}</div>
+          <div class="wish-meta">${formatDate(w.created_at)}</div>
+        </div>
+        <div class="wish-actions">
+          <button class="grant-btn ${w.granted ? 'granted' : ''}" onclick="toggleGranted('${w.id}', ${w.granted})">${w.granted ? '⭐' : '☆'}</button>
+          <button class="delete-btn" onclick="deleteWish('${w.id}')">🗑️</button>
+        </div>
+      </div>`).join('');
+  }
+
+  async function submitWish() {
+    const input = document.getElementById('wishInput');
+    const btn = document.getElementById('submitBtn');
+    const text = input.value.trim();
+    if (!text) return;
+    btn.disabled = true; btn.textContent = 'Dropping…';
+    const { data, error } = await db.from('wishes').insert([{ wish: text, granted: false, user_id: currentUser.id }]).select();
+    if (error) { showStatus('Something went wrong. Try again.', true); }
+    else { input.value = ''; wishes.unshift(data[0]); applyFilters(); showStatus('Your wish has been dropped in the jar ✨'); }
+    btn.disabled = false; btn.textContent = '✨ Drop it in the jar';
+  }
+
+  async function toggleGranted(id, currentState) {
+    const { error } = await db.from('wishes').update({ granted: !currentState }).eq('id', id);
+    if (!error) { const w = wishes.find(w => w.id === id); if (w) w.granted = !currentState; applyFilters(); }
+  }
+
+  async function deleteWish(id) {
+    if (!confirm('Delete this wish?')) return;
+    const { error } = await db.from('wishes').delete().eq('id', id);
+    if (!error) { wishes = wishes.filter(w => w.id !== id); applyFilters(); }
+  }
+
+  function showStatus(msg, isError = false) {
+    const el = document.getElementById('statusMsg');
+    el.textContent = msg;
+    el.className = 'status-msg visible' + (isError ? ' error' : '');
+    setTimeout(() => el.className = 'status-msg', 3000);
+  }
+
+  function formatDate(iso) { return new Date(iso).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }); }
+  function escapeHtml(str) { return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+  db.auth.getSession().then(({ data }) => { if (data.session) { currentUser = data.session.user; showApp(); } });
+</script>
+</body>
+</html>
