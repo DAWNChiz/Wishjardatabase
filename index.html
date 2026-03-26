@@ -72,7 +72,7 @@
       max-width: 560px;
     }
 
-    /* AUTH SCREEN */
+    /* AUTH */
     #authScreen {
       display: flex;
       flex-direction: column;
@@ -81,7 +81,6 @@
       min-height: 80vh;
       animation: fadeUp 0.6s ease both;
     }
-
     .auth-card {
       background: var(--glass);
       border: 1px solid var(--border);
@@ -92,88 +91,94 @@
       backdrop-filter: blur(12px);
       text-align: center;
     }
-
     .auth-jar { font-size: 48px; display: block; margin-bottom: 12px; filter: drop-shadow(0 0 20px rgba(232,201,126,0.4)); animation: float 4s ease-in-out infinite; }
     .auth-card h1 { font-family: 'Playfair Display', serif; font-size: 2rem; color: var(--gold); margin-bottom: 6px; }
     .auth-card p { color: var(--muted); font-style: italic; font-size: 0.9rem; margin-bottom: 28px; }
-
     .auth-tabs { display: flex; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin-bottom: 20px; }
     .auth-tab { flex: 1; padding: 10px; background: none; border: none; color: var(--muted); font-family: 'Lora', serif; font-size: 0.9rem; cursor: pointer; transition: all 0.2s; }
     .auth-tab.active { background: rgba(232,201,126,0.1); color: var(--gold); }
-
     .auth-input { width: 100%; background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 10px; color: var(--text); font-family: 'Lora', serif; font-size: 0.95rem; padding: 13px 16px; outline: none; margin-bottom: 12px; transition: border-color 0.3s; display: block; }
     .auth-input:focus { border-color: var(--gold-dim); }
     .auth-input::placeholder { color: var(--muted); }
-
-    /* Confirm password field — hidden on login, shown on signup */
     #confirmPasswordWrap { display: none; }
     #confirmPasswordWrap.visible { display: block; }
-
     .auth-btn { width: 100%; padding: 13px; background: linear-gradient(135deg, var(--gold-dim), var(--gold)); border: none; border-radius: 10px; color: #0d0b0f; font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 700; cursor: pointer; transition: opacity 0.2s, transform 0.15s; margin-top: 4px; }
     .auth-btn:hover { opacity: 0.9; transform: translateY(-1px); }
     .auth-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-
+    .forgot-link { display: inline-block; margin-top: 14px; font-size: 0.82rem; color: var(--gold-dim); font-style: italic; cursor: pointer; background: none; border: none; font-family: 'Lora', serif; text-decoration: underline; text-underline-offset: 3px; transition: color 0.2s; }
+    .forgot-link:hover { color: var(--gold); }
     .auth-msg { font-size: 0.82rem; margin-top: 12px; min-height: 18px; font-style: italic; color: var(--granted); }
     .auth-msg.error { color: var(--danger); }
+
+    /* FORGOT / RESET SCREENS */
+    #forgotScreen, #resetScreen {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 80vh;
+      animation: fadeUp 0.6s ease both;
+    }
 
     /* MAIN APP */
     #appScreen { display: none; }
 
+    /* Bottom nav */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      display: none;
+      justify-content: center;
+      background: rgba(13,11,15,0.96);
+      border-top: 1px solid var(--border);
+      backdrop-filter: blur(16px);
+      z-index: 100;
+    }
+    .bottom-nav.visible { display: flex; }
+    .nav-tab {
+      flex: 1;
+      max-width: 200px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      padding: 12px 8px 14px;
+      background: none;
+      border: none;
+      color: var(--muted);
+      font-family: 'Lora', serif;
+      font-size: 0.7rem;
+      cursor: pointer;
+      transition: color 0.2s;
+      letter-spacing: 0.5px;
+    }
+    .nav-tab .nav-icon { font-size: 1.3rem; }
+    .nav-tab.active { color: var(--gold); }
+    .nav-tab.active .nav-icon { filter: drop-shadow(0 0 6px rgba(232,201,126,0.5)); }
+
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* HEADER */
     header { text-align: center; margin-bottom: 36px; animation: fadeDown 0.8s ease both; }
     .jar-icon { font-size: 56px; display: block; margin-bottom: 12px; filter: drop-shadow(0 0 20px rgba(232,201,126,0.4)); animation: float 4s ease-in-out infinite; }
     h1 { font-family: 'Playfair Display', serif; font-size: 2.6rem; font-weight: 700; color: var(--gold); letter-spacing: -0.5px; line-height: 1.1; }
     .subtitle { font-style: italic; color: var(--muted); font-size: 0.95rem; margin-top: 6px; }
 
-    .user-bar {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-      margin-top: 14px;
-      flex-wrap: wrap;
-    }
-    .user-email-label {
-      font-size: 0.82rem;
-      color: var(--muted);
-      font-style: italic;
-    }
-    .signout-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: rgba(235, 87, 87, 0.08);
-      border: 1px solid rgba(235, 87, 87, 0.35);
-      border-radius: 8px;
-      color: #eb5757;
-      font-family: 'Lora', serif;
-      font-size: 0.82rem;
-      padding: 6px 14px;
-      cursor: pointer;
-      transition: all 0.2s;
-      letter-spacing: 0.3px;
-    }
-    .signout-btn:hover {
-      background: rgba(235, 87, 87, 0.18);
-      border-color: var(--danger);
-      transform: translateY(-1px);
-    }
-
+    /* WISH FORM */
     .wish-card { background: var(--glass); border: 1px solid var(--border); border-radius: 20px; padding: 28px; margin-bottom: 28px; backdrop-filter: blur(12px); animation: fadeUp 0.8s ease 0.2s both; }
     .wish-card label { display: block; font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase; color: var(--gold-dim); margin-bottom: 12px; }
-
     textarea { width: 100%; background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 12px; color: var(--text); font-family: 'Lora', serif; font-size: 1rem; padding: 16px; resize: none; height: 110px; outline: none; transition: border-color 0.3s; }
     textarea::placeholder { color: var(--muted); font-style: italic; }
     textarea:focus { border-color: var(--gold-dim); }
-
     button.submit-btn { width: 100%; margin-top: 16px; padding: 14px; background: linear-gradient(135deg, var(--gold-dim), var(--gold)); border: none; border-radius: 12px; color: #0d0b0f; font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 700; cursor: pointer; letter-spacing: 0.5px; transition: opacity 0.2s, transform 0.15s; }
     button.submit-btn:hover { opacity: 0.9; transform: translateY(-1px); }
     button.submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-
     .status-msg { text-align: center; font-size: 0.85rem; margin-top: 10px; min-height: 20px; color: var(--granted); font-style: italic; opacity: 0; transition: opacity 0.3s; }
     .status-msg.visible { opacity: 1; }
     .status-msg.error { color: var(--danger); }
 
-    /* SEARCH & FILTER */
+    /* FILTERS */
     .controls { display: flex; gap: 10px; margin-bottom: 20px; animation: fadeUp 0.8s ease 0.3s both; flex-wrap: wrap; }
     .search-input { flex: 1; min-width: 150px; background: var(--glass); border: 1px solid var(--border); border-radius: 10px; color: var(--text); font-family: 'Lora', serif; font-size: 0.9rem; padding: 10px 14px; outline: none; transition: border-color 0.3s; }
     .search-input:focus { border-color: var(--gold-dim); }
@@ -182,19 +187,15 @@
     .date-input:focus { border-color: var(--gold-dim); }
     .clear-btn { background: none; border: 1px solid var(--border); border-radius: 10px; color: var(--muted); font-size: 0.8rem; padding: 10px 12px; cursor: pointer; font-family: 'Lora', serif; transition: all 0.2s; white-space: nowrap; }
     .clear-btn:hover { border-color: var(--gold-dim); color: var(--gold); }
-
     .wishes-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; animation: fadeUp 0.8s ease 0.4s both; }
     .wishes-header h2 { font-family: 'Playfair Display', serif; font-size: 1.2rem; color: var(--gold); }
     .count-badge { font-size: 0.75rem; background: rgba(232,201,126,0.1); border: 1px solid var(--gold-dim); color: var(--gold-dim); padding: 3px 10px; border-radius: 20px; }
-
     .wishes-list { display: flex; flex-direction: column; gap: 12px; }
-
     .wish-item { background: var(--glass); border: 1px solid var(--border); border-radius: 16px; padding: 18px 20px; display: flex; align-items: flex-start; gap: 10px; animation: fadeUp 0.4s ease both; transition: border-color 0.3s, background 0.3s; }
     .wish-item.granted-item { border-color: rgba(111,207,151,0.2); background: rgba(111,207,151,0.04); }
     .wish-text { flex: 1; font-size: 0.97rem; line-height: 1.6; color: var(--text); }
     .wish-item.granted-item .wish-text { text-decoration: line-through; color: var(--muted); }
     .wish-meta { font-size: 0.72rem; color: var(--muted); margin-top: 4px; font-style: italic; }
-
     .wish-actions { display: flex; flex-direction: column; gap: 6px; flex-shrink: 0; }
     .grant-btn, .delete-btn { background: none; border: 1px solid var(--border); border-radius: 8px; padding: 6px 10px; font-size: 1rem; cursor: pointer; transition: all 0.2s; }
     .grant-btn { color: var(--muted); }
@@ -202,10 +203,45 @@
     .grant-btn.granted { border-color: var(--granted); color: var(--granted); }
     .delete-btn { color: var(--muted); }
     .delete-btn:hover { border-color: var(--danger); color: var(--danger); }
-
     .empty-state { text-align: center; padding: 48px 20px; color: var(--muted); font-style: italic; animation: fadeUp 0.5s ease both; }
     .empty-state span { font-size: 2rem; display: block; margin-bottom: 12px; }
     .loading { text-align: center; padding: 30px; color: var(--muted); font-style: italic; font-size: 0.9rem; }
+
+    /* PROFILE TAB */
+    .profile-header { text-align: center; margin-bottom: 28px; animation: fadeDown 0.8s ease both; }
+    .profile-avatar {
+      width: 80px; height: 80px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--gold-dim), var(--gold));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2rem;
+      margin: 0 auto 14px;
+      font-family: 'Playfair Display', serif;
+      color: #0d0b0f;
+      font-weight: 700;
+      box-shadow: 0 0 30px rgba(232,201,126,0.2);
+    }
+    .profile-name { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: var(--gold); }
+    .profile-email-sub { font-size: 0.82rem; color: var(--muted); font-style: italic; margin-top: 4px; }
+    .settings-section { background: var(--glass); border: 1px solid var(--border); border-radius: 20px; padding: 24px; margin-bottom: 18px; backdrop-filter: blur(12px); animation: fadeUp 0.5s ease both; }
+    .settings-section-title { font-size: 0.7rem; letter-spacing: 2.5px; text-transform: uppercase; color: var(--gold-dim); margin-bottom: 18px; }
+    .settings-field { margin-bottom: 14px; }
+    .settings-field label { display: block; font-size: 0.78rem; color: var(--muted); margin-bottom: 6px; letter-spacing: 0.5px; }
+    .settings-input { width: 100%; background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 10px; color: var(--text); font-family: 'Lora', serif; font-size: 0.93rem; padding: 11px 14px; outline: none; transition: border-color 0.3s; }
+    .settings-input:focus { border-color: var(--gold-dim); }
+    .settings-input::placeholder { color: var(--muted); }
+    .settings-btn { width: 100%; padding: 12px; background: linear-gradient(135deg, var(--gold-dim), var(--gold)); border: none; border-radius: 10px; color: #0d0b0f; font-family: 'Playfair Display', serif; font-size: 0.95rem; font-weight: 700; cursor: pointer; transition: opacity 0.2s, transform 0.15s; margin-top: 6px; }
+    .settings-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+    .settings-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .settings-btn.danger-btn { background: none; border: 1px solid rgba(235,87,87,0.4); color: var(--danger); }
+    .settings-btn.danger-btn:hover { background: rgba(235,87,87,0.08); border-color: var(--danger); transform: translateY(-1px); }
+    .settings-msg { font-size: 0.8rem; margin-top: 10px; font-style: italic; min-height: 18px; color: var(--granted); text-align: center; }
+    .settings-msg.error { color: var(--danger); }
+    .stat-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border); }
+    .stat-row:last-child { border-bottom: none; padding-bottom: 0; }
+    .stat-label { font-size: 0.85rem; color: var(--muted); }
+    .stat-value { font-size: 0.95rem; color: var(--text); font-family: 'Playfair Display', serif; }
+    .stat-value.gold { color: var(--gold); }
 
     @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
     @keyframes fadeDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
@@ -227,211 +263,366 @@
       </div>
       <input class="auth-input" id="authEmail" type="email" placeholder="Email address" />
       <input class="auth-input" id="authPassword" type="password" placeholder="Password" />
-      <!-- Confirm password — only shown during sign up -->
       <div id="confirmPasswordWrap">
         <input class="auth-input" id="authConfirmPassword" type="password" placeholder="Confirm password" />
       </div>
       <button class="auth-btn" id="authBtn" onclick="handleAuth()">✨ Sign In</button>
+      <div id="forgotWrap">
+        <button class="forgot-link" onclick="showForgot()">Forgot password?</button>
+      </div>
       <div class="auth-msg" id="authMsg"></div>
+    </div>
+  </div>
+
+  <!-- FORGOT PASSWORD SCREEN -->
+  <div id="forgotScreen">
+    <div class="auth-card">
+      <span class="auth-jar">🔑</span>
+      <h1>Reset Password</h1>
+      <p>Enter your email and we'll send you a reset link</p>
+      <input class="auth-input" id="forgotEmail" type="email" placeholder="Email address" />
+      <button class="auth-btn" id="forgotBtn" onclick="sendReset()">✉️ Send Reset Link</button>
+      <div class="auth-msg" id="forgotMsg"></div>
+      <button class="forgot-link" onclick="showAuth()">← Back to Sign In</button>
+    </div>
+  </div>
+
+  <!-- RESET PASSWORD SCREEN -->
+  <div id="resetScreen">
+    <div class="auth-card">
+      <span class="auth-jar">🔒</span>
+      <h1>New Password</h1>
+      <p>Choose a strong new password</p>
+      <input class="auth-input" id="resetPassword" type="password" placeholder="New password" />
+      <input class="auth-input" id="resetConfirm" type="password" placeholder="Confirm new password" />
+      <button class="auth-btn" id="resetBtn" onclick="doReset()">🔐 Update Password</button>
+      <div class="auth-msg" id="resetMsg"></div>
     </div>
   </div>
 
   <!-- MAIN APP -->
   <div id="appScreen">
-    <header>
-      <span class="jar-icon">🫙</span>
-      <h1>Wish Jar</h1>
-      <p class="subtitle">Write it down. Set it free.</p>
-      <div class="user-bar">
-        <span class="user-email-label" id="userEmail"></span>
-        <button class="signout-btn" onclick="signOut()">🚪 Sign Out</button>
+
+    <!-- WISHES TAB -->
+    <div class="tab-panel active" id="panelWishes">
+      <header>
+        <span class="jar-icon">🫙</span>
+        <h1>Wish Jar</h1>
+        <p class="subtitle">Write it down. Set it free.</p>
+      </header>
+      <div class="wish-card">
+        <label>Your Wish</label>
+        <textarea id="wishInput" placeholder="I wish for…" maxlength="500"></textarea>
+        <button class="submit-btn" id="submitBtn" onclick="submitWish()">✨ Drop it in the jar</button>
+        <div class="status-msg" id="statusMsg"></div>
       </div>
-    </header>
-
-    <div class="wish-card">
-      <label>Your Wish</label>
-      <textarea id="wishInput" placeholder="I wish for…" maxlength="500"></textarea>
-      <button class="submit-btn" id="submitBtn" onclick="submitWish()">✨ Drop it in the jar</button>
-      <div class="status-msg" id="statusMsg"></div>
+      <div class="controls">
+        <input class="search-input" id="searchInput" type="text" placeholder="🔍 Search wishes…" oninput="applyFilters()" />
+        <input class="date-input" id="dateFilter" type="date" onchange="applyFilters()" />
+        <button class="clear-btn" onclick="clearFilters()">Clear</button>
+      </div>
+      <div class="wishes-header">
+        <h2>All Wishes</h2>
+        <span class="count-badge" id="countBadge">0 wishes</span>
+      </div>
+      <div class="wishes-list" id="wishesList">
+        <div class="loading">Loading wishes…</div>
+      </div>
     </div>
 
-    <div class="controls">
-      <input class="search-input" id="searchInput" type="text" placeholder="🔍 Search wishes…" oninput="applyFilters()" />
-      <input class="date-input" id="dateFilter" type="date" onchange="applyFilters()" />
-      <button class="clear-btn" onclick="clearFilters()">Clear</button>
+    <!-- PROFILE TAB -->
+    <div class="tab-panel" id="panelProfile">
+      <div class="profile-header">
+        <div class="profile-avatar" id="profileAvatar">?</div>
+        <div class="profile-name" id="profileName">—</div>
+        <div class="profile-email-sub" id="profileEmailSub">—</div>
+      </div>
+
+      <div class="settings-section" style="animation-delay:0.05s">
+        <div class="settings-section-title">✨ Your Stats</div>
+        <div class="stat-row">
+          <span class="stat-label">Total wishes</span>
+          <span class="stat-value gold" id="statTotal">—</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">Wishes granted</span>
+          <span class="stat-value gold" id="statGranted">—</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">Still waiting</span>
+          <span class="stat-value" id="statPending">—</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">Member since</span>
+          <span class="stat-value" id="statSince">—</span>
+        </div>
+      </div>
+
+      <div class="settings-section" style="animation-delay:0.1s">
+        <div class="settings-section-title">📧 Change Email</div>
+        <div class="settings-field">
+          <label>New Email Address</label>
+          <input class="settings-input" id="newEmail" type="email" placeholder="Enter new email" />
+        </div>
+        <button class="settings-btn" onclick="updateEmail()">Update Email</button>
+        <div class="settings-msg" id="emailMsg"></div>
+      </div>
+
+      <div class="settings-section" style="animation-delay:0.15s">
+        <div class="settings-section-title">🔐 Change Password</div>
+        <div class="settings-field">
+          <label>New Password</label>
+          <input class="settings-input" id="newPassword" type="password" placeholder="Enter new password" />
+        </div>
+        <div class="settings-field">
+          <label>Confirm New Password</label>
+          <input class="settings-input" id="confirmNewPassword" type="password" placeholder="Confirm new password" />
+        </div>
+        <button class="settings-btn" onclick="updatePassword()">Update Password</button>
+        <div class="settings-msg" id="passwordMsg"></div>
+      </div>
+
+      <div class="settings-section" style="animation-delay:0.2s">
+        <div class="settings-section-title">⚙️ Account</div>
+        <button class="settings-btn danger-btn" onclick="signOut()">🚪 Sign Out</button>
+      </div>
+
+      <div style="height:20px"></div>
     </div>
 
-    <div class="wishes-header">
-      <h2>All Wishes</h2>
-      <span class="count-badge" id="countBadge">0 wishes</span>
-    </div>
-
-    <div class="wishes-list" id="wishesList">
-      <div class="loading">Loading wishes…</div>
-    </div>
   </div>
-
 </div>
+
+<!-- Bottom Nav -->
+<nav class="bottom-nav" id="bottomNav">
+  <button class="nav-tab active" id="navWishes" onclick="switchAppTab('wishes')">
+    <span class="nav-icon">🫙</span>Wishes
+  </button>
+  <button class="nav-tab" id="navProfile" onclick="switchAppTab('profile')">
+    <span class="nav-icon">👤</span>Profile
+  </button>
+</nav>
+
 <script>
   const SUPABASE_URL = 'https://hzrwpqoakptgiyuwxywp.supabase.co';
   const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh6cndwcW9ha3B0Z2l5dXd4eXdwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ1Mjk5MDAsImV4cCI6MjA5MDEwNTkwMH0.2kF0VG2mete24UxW_H12bNT4XVdKI8R0n4incmnFZHA';
   const { createClient } = supabase;
   const db = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  let wishes = [];
-  let currentTab = 'login';
-  let currentUser = null;
+  let wishes = [], currentTab = 'login', currentUser = null;
+
+  function hide(ids) { ids.forEach(id => { const el = document.getElementById(id); if(el) el.style.display = 'none'; }); }
+
+  function showAuth() {
+    hide(['forgotScreen','resetScreen','appScreen']);
+    document.getElementById('authScreen').style.display = 'flex';
+    document.getElementById('bottomNav').classList.remove('visible');
+  }
+  function showForgot() {
+    hide(['authScreen','resetScreen','appScreen']);
+    document.getElementById('forgotScreen').style.display = 'flex';
+  }
+  function showReset() {
+    hide(['authScreen','forgotScreen','appScreen']);
+    document.getElementById('resetScreen').style.display = 'flex';
+  }
 
   function switchTab(tab) {
     currentTab = tab;
     document.querySelectorAll('.auth-tab').forEach((t, i) => {
-      t.classList.toggle('active', (i === 0 && tab === 'login') || (i === 1 && tab === 'signup'));
+      t.classList.toggle('active', (i===0&&tab==='login')||(i===1&&tab==='signup'));
     });
-    document.getElementById('authBtn').textContent = tab === 'login' ? '✨ Sign In' : '✨ Create Account';
+    document.getElementById('authBtn').textContent = tab==='login' ? '✨ Sign In' : '✨ Create Account';
     document.getElementById('authMsg').textContent = '';
-    // Show/hide confirm password field
-    const confirmWrap = document.getElementById('confirmPasswordWrap');
-    if (tab === 'signup') {
-      confirmWrap.classList.add('visible');
-    } else {
-      confirmWrap.classList.remove('visible');
-      document.getElementById('authConfirmPassword').value = '';
-    }
+    document.getElementById('forgotWrap').style.display = tab==='login' ? 'block' : 'none';
+    const cw = document.getElementById('confirmPasswordWrap');
+    if(tab==='signup'){ cw.classList.add('visible'); } else { cw.classList.remove('visible'); document.getElementById('authConfirmPassword').value=''; }
   }
 
   async function handleAuth() {
     const email = document.getElementById('authEmail').value.trim();
     const password = document.getElementById('authPassword').value;
     const btn = document.getElementById('authBtn');
-
-    if (!email || !password) { showAuthMsg('Please fill in both fields.', true); return; }
-
-    // Confirm password check for sign up
-    if (currentTab === 'signup') {
-      const confirmPassword = document.getElementById('authConfirmPassword').value;
-      if (!confirmPassword) { showAuthMsg('Please confirm your password.', true); return; }
-      if (password !== confirmPassword) { showAuthMsg('Passwords do not match.', true); return; }
-      if (password.length < 6) { showAuthMsg('Password must be at least 6 characters.', true); return; }
+    if(!email||!password){ showAuthMsg('Please fill in both fields.',true); return; }
+    if(currentTab==='signup'){
+      const confirm = document.getElementById('authConfirmPassword').value;
+      if(!confirm){ showAuthMsg('Please confirm your password.',true); return; }
+      if(password!==confirm){ showAuthMsg('Passwords do not match.',true); return; }
+      if(password.length<6){ showAuthMsg('Password must be at least 6 characters.',true); return; }
     }
-
-    btn.disabled = true;
-    btn.textContent = 'Please wait…';
+    btn.disabled=true; btn.textContent='Please wait…';
     let result;
-    if (currentTab === 'login') {
-      result = await db.auth.signInWithPassword({ email, password });
-    } else {
-      result = await db.auth.signUp({ email, password });
-    }
-    if (result.error) {
-      showAuthMsg(result.error.message, true);
-    } else if (currentTab === 'signup' && !result.data.session) {
-      showAuthMsg('Check your email to confirm your account!', false);
-    } else {
-      currentUser = result.data.user;
-      showApp();
-    }
-    btn.disabled = false;
-    btn.textContent = currentTab === 'login' ? '✨ Sign In' : '✨ Create Account';
+    if(currentTab==='login'){ result=await db.auth.signInWithPassword({email,password}); }
+    else { result=await db.auth.signUp({email,password}); }
+    if(result.error){ showAuthMsg(result.error.message,true); }
+    else if(currentTab==='signup'&&!result.data.session){ showAuthMsg('Check your email to confirm your account!',false); }
+    else { currentUser=result.data.user; showApp(); }
+    btn.disabled=false; btn.textContent=currentTab==='login'?'✨ Sign In':'✨ Create Account';
+  }
+
+  function showAuthMsg(msg,isError){ const el=document.getElementById('authMsg'); el.textContent=msg; el.className='auth-msg'+(isError?' error':''); }
+
+  async function sendReset() {
+    const email = document.getElementById('forgotEmail').value.trim();
+    const btn = document.getElementById('forgotBtn');
+    const msg = document.getElementById('forgotMsg');
+    if(!email){ msg.textContent='Please enter your email.'; msg.className='auth-msg error'; return; }
+    btn.disabled=true; btn.textContent='Sending…';
+    const redirectTo = window.location.href.split('?')[0];
+    const {error} = await db.auth.resetPasswordForEmail(email,{redirectTo});
+    if(error){ msg.textContent=error.message; msg.className='auth-msg error'; }
+    else { msg.textContent='Reset link sent! Check your email 📬'; msg.className='auth-msg'; }
+    btn.disabled=false; btn.textContent='✉️ Send Reset Link';
+  }
+
+  async function doReset() {
+    const password = document.getElementById('resetPassword').value;
+    const confirm = document.getElementById('resetConfirm').value;
+    const btn = document.getElementById('resetBtn');
+    const msg = document.getElementById('resetMsg');
+    if(!password||!confirm){ msg.textContent='Please fill in both fields.'; msg.className='auth-msg error'; return; }
+    if(password!==confirm){ msg.textContent='Passwords do not match.'; msg.className='auth-msg error'; return; }
+    if(password.length<6){ msg.textContent='Password must be at least 6 characters.'; msg.className='auth-msg error'; return; }
+    btn.disabled=true; btn.textContent='Updating…';
+    const {error} = await db.auth.updateUser({password});
+    if(error){ msg.textContent=error.message; msg.className='auth-msg error'; }
+    else { msg.textContent='Password updated! Redirecting…'; msg.className='auth-msg'; setTimeout(()=>showAuth(),1800); }
+    btn.disabled=false; btn.textContent='🔐 Update Password';
   }
 
   async function signOut() {
     await db.auth.signOut();
-    currentUser = null; wishes = [];
-    document.getElementById('appScreen').style.display = 'none';
-    document.getElementById('authScreen').style.display = 'flex';
-    document.getElementById('authEmail').value = '';
-    document.getElementById('authPassword').value = '';
-    document.getElementById('authConfirmPassword').value = '';
-  }
-
-  function showAuthMsg(msg, isError) {
-    const el = document.getElementById('authMsg');
-    el.textContent = msg;
-    el.className = 'auth-msg' + (isError ? ' error' : '');
+    currentUser=null; wishes=[];
+    document.getElementById('appScreen').style.display='none';
+    document.getElementById('bottomNav').classList.remove('visible');
+    showAuth();
+    ['authEmail','authPassword','authConfirmPassword'].forEach(id=>document.getElementById(id).value='');
   }
 
   function showApp() {
-    document.getElementById('authScreen').style.display = 'none';
-    document.getElementById('appScreen').style.display = 'block';
-    document.getElementById('userEmail').textContent = currentUser.email;
+    hide(['authScreen','forgotScreen','resetScreen']);
+    document.getElementById('appScreen').style.display='block';
+    document.getElementById('bottomNav').classList.add('visible');
+    switchAppTab('wishes');
     loadWishes();
   }
 
+  function switchAppTab(tab) {
+    document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+    document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+    const key = tab.charAt(0).toUpperCase()+tab.slice(1);
+    document.getElementById('panel'+key).classList.add('active');
+    document.getElementById('nav'+key).classList.add('active');
+    if(tab==='profile') populateProfile();
+  }
+
+  function populateProfile() {
+    if(!currentUser) return;
+    const email = currentUser.email||'';
+    document.getElementById('profileAvatar').textContent = email.charAt(0).toUpperCase();
+    document.getElementById('profileName').textContent = email.split('@')[0];
+    document.getElementById('profileEmailSub').textContent = email;
+    document.getElementById('statSince').textContent = new Date(currentUser.created_at).toLocaleDateString('en-US',{month:'long',year:'numeric'});
+    const total=wishes.length, granted=wishes.filter(w=>w.granted).length;
+    document.getElementById('statTotal').textContent=total;
+    document.getElementById('statGranted').textContent=granted;
+    document.getElementById('statPending').textContent=total-granted;
+  }
+
+  async function updateEmail() {
+    const email=document.getElementById('newEmail').value.trim();
+    const msg=document.getElementById('emailMsg');
+    if(!email){ msg.textContent='Please enter a new email.'; msg.className='settings-msg error'; return; }
+    const {error}=await db.auth.updateUser({email});
+    if(error){ msg.textContent=error.message; msg.className='settings-msg error'; }
+    else { msg.textContent='Confirmation sent to new email! ✅'; msg.className='settings-msg'; document.getElementById('newEmail').value=''; }
+  }
+
+  async function updatePassword() {
+    const password=document.getElementById('newPassword').value;
+    const confirm=document.getElementById('confirmNewPassword').value;
+    const msg=document.getElementById('passwordMsg');
+    if(!password||!confirm){ msg.textContent='Please fill in both fields.'; msg.className='settings-msg error'; return; }
+    if(password!==confirm){ msg.textContent='Passwords do not match.'; msg.className='settings-msg error'; return; }
+    if(password.length<6){ msg.textContent='Password must be at least 6 characters.'; msg.className='settings-msg error'; return; }
+    const {error}=await db.auth.updateUser({password});
+    if(error){ msg.textContent=error.message; msg.className='settings-msg error'; }
+    else { msg.textContent='Password updated successfully! 🔐'; msg.className='settings-msg'; document.getElementById('newPassword').value=''; document.getElementById('confirmNewPassword').value=''; }
+  }
+
   async function loadWishes() {
-    const { data, error } = await db.from('wishes').select('*').eq('user_id', currentUser.id).order('created_at', { ascending: false });
-    if (error) { document.getElementById('wishesList').innerHTML = `<div class="loading">Could not load wishes.</div>`; return; }
-    wishes = data;
-    applyFilters();
+    const {data,error}=await db.from('wishes').select('*').eq('user_id',currentUser.id).order('created_at',{ascending:false});
+    if(error){ document.getElementById('wishesList').innerHTML=`<div class="loading">Could not load wishes.</div>`; return; }
+    wishes=data; applyFilters(); populateProfile();
   }
 
   function applyFilters() {
-    const search = document.getElementById('searchInput').value.toLowerCase();
-    const date = document.getElementById('dateFilter').value;
-    const filtered = wishes.filter(w => {
-      const matchSearch = !search || w.wish.toLowerCase().includes(search);
-      const matchDate = !date || w.created_at.startsWith(date);
-      return matchSearch && matchDate;
-    });
+    const search=document.getElementById('searchInput').value.toLowerCase();
+    const date=document.getElementById('dateFilter').value;
+    const filtered=wishes.filter(w=>(!search||w.wish.toLowerCase().includes(search))&&(!date||w.created_at.startsWith(date)));
     renderWishes(filtered);
   }
 
-  function clearFilters() {
-    document.getElementById('searchInput').value = '';
-    document.getElementById('dateFilter').value = '';
-    applyFilters();
-  }
+  function clearFilters(){ document.getElementById('searchInput').value=''; document.getElementById('dateFilter').value=''; applyFilters(); }
 
   function renderWishes(list) {
-    const el = document.getElementById('wishesList');
-    document.getElementById('countBadge').textContent = `${list.length} wish${list.length !== 1 ? 'es' : ''}`;
-    if (list.length === 0) { el.innerHTML = `<div class="empty-state"><span>🌙</span>No wishes found.</div>`; return; }
-    el.innerHTML = list.map((w, i) => `
-      <div class="wish-item ${w.granted ? 'granted-item' : ''}" style="animation-delay:${i * 0.05}s">
+    const el=document.getElementById('wishesList');
+    document.getElementById('countBadge').textContent=`${list.length} wish${list.length!==1?'es':''}`;
+    if(list.length===0){ el.innerHTML=`<div class="empty-state"><span>🌙</span>No wishes found.</div>`; return; }
+    el.innerHTML=list.map((w,i)=>`
+      <div class="wish-item ${w.granted?'granted-item':''}" style="animation-delay:${i*0.05}s">
         <div style="flex:1">
           <div class="wish-text">${escapeHtml(w.wish)}</div>
           <div class="wish-meta">${formatDate(w.created_at)}</div>
         </div>
         <div class="wish-actions">
-          <button class="grant-btn ${w.granted ? 'granted' : ''}" onclick="toggleGranted('${w.id}', ${w.granted})">${w.granted ? '⭐' : '☆'}</button>
+          <button class="grant-btn ${w.granted?'granted':''}" onclick="toggleGranted('${w.id}',${w.granted})">${w.granted?'⭐':'☆'}</button>
           <button class="delete-btn" onclick="deleteWish('${w.id}')">🗑️</button>
         </div>
       </div>`).join('');
   }
 
   async function submitWish() {
-    const input = document.getElementById('wishInput');
-    const btn = document.getElementById('submitBtn');
-    const text = input.value.trim();
-    if (!text) return;
-    btn.disabled = true; btn.textContent = 'Dropping…';
-    const { data, error } = await db.from('wishes').insert([{ wish: text, granted: false, user_id: currentUser.id }]).select();
-    if (error) { showStatus('Something went wrong. Try again.', true); }
-    else { input.value = ''; wishes.unshift(data[0]); applyFilters(); showStatus('Your wish has been dropped in the jar ✨'); }
-    btn.disabled = false; btn.textContent = '✨ Drop it in the jar';
+    const input=document.getElementById('wishInput');
+    const btn=document.getElementById('submitBtn');
+    const text=input.value.trim();
+    if(!text) return;
+    btn.disabled=true; btn.textContent='Dropping…';
+    const {data,error}=await db.from('wishes').insert([{wish:text,granted:false,user_id:currentUser.id}]).select();
+    if(error){ showStatus('Something went wrong. Try again.',true); }
+    else { input.value=''; wishes.unshift(data[0]); applyFilters(); showStatus('Your wish has been dropped in the jar ✨'); }
+    btn.disabled=false; btn.textContent='✨ Drop it in the jar';
   }
 
-  async function toggleGranted(id, currentState) {
-    const { error } = await db.from('wishes').update({ granted: !currentState }).eq('id', id);
-    if (!error) { const w = wishes.find(w => w.id === id); if (w) w.granted = !currentState; applyFilters(); }
+  async function toggleGranted(id,currentState) {
+    const {error}=await db.from('wishes').update({granted:!currentState}).eq('id',id);
+    if(!error){ const w=wishes.find(w=>w.id===id); if(w) w.granted=!currentState; applyFilters(); populateProfile(); }
   }
 
   async function deleteWish(id) {
-    if (!confirm('Delete this wish?')) return;
-    const { error } = await db.from('wishes').delete().eq('id', id);
-    if (!error) { wishes = wishes.filter(w => w.id !== id); applyFilters(); }
+    if(!confirm('Delete this wish?')) return;
+    const {error}=await db.from('wishes').delete().eq('id',id);
+    if(!error){ wishes=wishes.filter(w=>w.id!==id); applyFilters(); populateProfile(); }
   }
 
-  function showStatus(msg, isError = false) {
-    const el = document.getElementById('statusMsg');
-    el.textContent = msg;
-    el.className = 'status-msg visible' + (isError ? ' error' : '');
-    setTimeout(() => el.className = 'status-msg', 3000);
+  function showStatus(msg,isError=false) {
+    const el=document.getElementById('statusMsg');
+    el.textContent=msg; el.className='status-msg visible'+(isError?' error':'');
+    setTimeout(()=>el.className='status-msg',3000);
   }
 
-  function formatDate(iso) { return new Date(iso).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }); }
-  function escapeHtml(str) { return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+  function formatDate(iso){ return new Date(iso).toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'}); }
+  function escapeHtml(str){ return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
-  db.auth.getSession().then(({ data }) => { if (data.session) { currentUser = data.session.user; showApp(); } });
+  // Handle password reset redirect & session
+  db.auth.onAuthStateChange((event,session)=>{
+    if(event==='PASSWORD_RECOVERY'){ showReset(); }
+    else if(event==='SIGNED_IN'&&session&&document.getElementById('resetScreen').style.display!=='flex'){
+      currentUser=session.user; showApp();
+    }
+  });
+
+  db.auth.getSession().then(({data})=>{ if(data.session){ currentUser=data.session.user; showApp(); } });
 </script>
 </body>
 </html>
