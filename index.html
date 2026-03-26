@@ -183,8 +183,46 @@
     .search-input { flex: 1; min-width: 150px; background: var(--glass); border: 1px solid var(--border); border-radius: 10px; color: var(--text); font-family: 'Lora', serif; font-size: 0.9rem; padding: 10px 14px; outline: none; transition: border-color 0.3s; }
     .search-input:focus { border-color: var(--gold-dim); }
     .search-input::placeholder { color: var(--muted); font-style: italic; }
-    .date-input { background: var(--glass); border: 1px solid var(--border); border-radius: 10px; color: var(--muted); font-family: 'Lora', serif; font-size: 0.85rem; padding: 10px 12px; outline: none; color-scheme: dark; transition: border-color 0.3s; }
-    .date-input:focus { border-color: var(--gold-dim); }
+
+    /* DATE WRAPPER */
+    .date-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+      background: var(--glass);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 12px;
+      gap: 6px;
+      cursor: pointer;
+      transition: border-color 0.3s;
+      min-width: 0;
+    }
+    .date-wrap:focus-within { border-color: var(--gold-dim); }
+    .date-wrap.has-value { border-color: rgba(232,201,126,0.3); }
+    .date-icon { font-size: 0.9rem; flex-shrink: 0; line-height: 1; }
+    .date-label {
+      font-size: 0.82rem;
+      font-family: 'Lora', serif;
+      font-style: italic;
+      color: var(--muted);
+      white-space: nowrap;
+      pointer-events: none;
+      transition: all 0.2s;
+    }
+    .date-wrap.has-value .date-label { color: var(--gold-dim); font-style: normal; }
+    .date-input {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+      border: none;
+      background: transparent;
+      color-scheme: dark;
+    }
+
     .clear-btn { background: none; border: 1px solid var(--border); border-radius: 10px; color: var(--muted); font-size: 0.8rem; padding: 10px 12px; cursor: pointer; font-family: 'Lora', serif; transition: all 0.2s; white-space: nowrap; }
     .clear-btn:hover { border-color: var(--gold-dim); color: var(--gold); }
     .wishes-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; animation: fadeUp 0.8s ease 0.4s both; }
@@ -318,7 +356,11 @@
       </div>
       <div class="controls">
         <input class="search-input" id="searchInput" type="text" placeholder="🔍 Search wishes…" oninput="applyFilters()" />
-        <input class="date-input" id="dateFilter" type="date" onchange="applyFilters()" />
+        <div class="date-wrap" id="dateWrap">
+          <span class="date-icon">📅</span>
+          <span class="date-label" id="dateLabel">Filter by date</span>
+          <input class="date-input" id="dateFilter" type="date" onchange="onDateChange()" />
+        </div>
         <button class="clear-btn" onclick="clearFilters()">Clear</button>
       </div>
       <div class="wishes-header">
@@ -556,6 +598,21 @@
     wishes=data; applyFilters(); populateProfile();
   }
 
+  function onDateChange() {
+    const val = document.getElementById('dateFilter').value;
+    const wrap = document.getElementById('dateWrap');
+    const label = document.getElementById('dateLabel');
+    if(val) {
+      wrap.classList.add('has-value');
+      const d = new Date(val + 'T00:00:00');
+      label.textContent = d.toLocaleDateString('en-US', {month:'short', day:'numeric', year:'numeric'});
+    } else {
+      wrap.classList.remove('has-value');
+      label.textContent = 'Filter by date';
+    }
+    applyFilters();
+  }
+
   function applyFilters() {
     const search=document.getElementById('searchInput').value.toLowerCase();
     const date=document.getElementById('dateFilter').value;
@@ -563,7 +620,13 @@
     renderWishes(filtered);
   }
 
-  function clearFilters(){ document.getElementById('searchInput').value=''; document.getElementById('dateFilter').value=''; applyFilters(); }
+  function clearFilters(){
+    document.getElementById('searchInput').value='';
+    document.getElementById('dateFilter').value='';
+    document.getElementById('dateWrap').classList.remove('has-value');
+    document.getElementById('dateLabel').textContent='Filter by date';
+    applyFilters();
+  }
 
   function renderWishes(list) {
     const el=document.getElementById('wishesList');
@@ -614,7 +677,6 @@
   function formatDate(iso){ return new Date(iso).toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'}); }
   function escapeHtml(str){ return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
-  // Handle password reset redirect & session
   db.auth.onAuthStateChange((event,session)=>{
     if(event==='PASSWORD_RECOVERY'){ showReset(); }
     else if(event==='SIGNED_IN'&&session&&document.getElementById('resetScreen').style.display!=='flex'){
